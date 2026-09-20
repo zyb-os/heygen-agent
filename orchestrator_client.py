@@ -439,6 +439,10 @@ class OrchestratorClient:
                     if self._active_task and not self._active_task.done():
                         self._active_task.cancel()
                         logger.info("Task cancelled via task_cancel")
+                elif mtype == "agent_restart":
+                    logger.info("Restart requested by orchestrator — shutting down for restart")
+                    import sys
+                    asyncio.get_event_loop().call_later(1.0, lambda: sys.exit(0))
                 else:
                     logger.debug("← unhandled: %r", mtype)
             except Exception as exc:
